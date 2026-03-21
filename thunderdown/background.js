@@ -31,10 +31,11 @@ async function toggleMarkdown(tab) {
     if (rendered) {
       // ── Restore original Markdown ──
       console.log('[Thunderdown] Restoring markdown for tab', tabId);
-      const markdown = await ThunderdownState.restore(tabId);
-      if (markdown !== null) {
+      const restoreData = await ThunderdownState.restore(tabId);
+      if (restoreData !== null) {
+        const restoredBody = markdownToPlainHtml(restoreData.markdown) + restoreData.quotedSection;
         await messenger.compose.setComposeDetails(tabId, {
-          body: markdownToPlainHtml(markdown),
+          body: restoredBody,
         });
         await updateButtonState(tabId, false);
       }
@@ -56,13 +57,14 @@ async function toggleMarkdown(tab) {
         return;
       }
 
-      await ThunderdownState.save(tabId, markdown);
+      const quotedSection = extractQuotedSection(details.body || '');
+      await ThunderdownState.save(tabId, markdown, quotedSection);
 
       const renderedHtml = Thunderdown.renderMarkdown(markdown);
       console.log('[Thunderdown] Rendered HTML length:', renderedHtml.length);
 
       await messenger.compose.setComposeDetails(tabId, {
-        body: renderedHtml,
+        body: renderedHtml + quotedSection,
       });
       await updateButtonState(tabId, true);
       console.log('[Thunderdown] Render complete');
@@ -75,6 +77,7 @@ async function toggleMarkdown(tab) {
 /**
  * Extract the raw markdown text from compose body.
  * Handles both plain text and HTML compose modes.
+ * Stops at the quoted reply boundary (moz-cite-prefix / blockquote[type=cite]).
  */
 function extractMarkdownFromBody(details) {
   if (details.isPlainText) {
@@ -87,6 +90,11 @@ function extractMarkdownFromBody(details) {
   // Strip the wrapping HTML structure Thunderbird adds.
   let match = body.match(/<body[^>]*>([\s\S]*)<\/body>/i);
   let content = match ? match[1] : body;
+
+  // Remove quoted reply section — everything from moz-cite-prefix onward
+  content = content.replace(/<div class="moz-cite-prefix">[\s\S]*$/, '');
+  // Also handle blockquote[type=cite] without a preceding cite-prefix
+  content = content.replace(/<blockquote[^>]*type="cite"[\s\S]*$/, '');
 
   // Convert <br> and <div>/<p> breaks to newlines
   content = content.replace(/<br\s*\/?>/gi, '\n');
@@ -111,6 +119,20 @@ function extractMarkdownFromBody(details) {
   content = content.replace(/[ \t]+$/gm, '');
 
   return content;
+}
+
+/**
+ * Extract the quoted reply section from the compose body HTML.
+ * Returns the raw HTML from moz-cite-prefix onward, or empty string.
+ */
+function extractQuotedSection(body) {
+  // Match from moz-cite-prefix through end of body
+  let match = body.match(/(<div class="moz-cite-prefix">[\s\S]*)<\/body>/i);
+  if (match) return match[1];
+  // Fall back to blockquote[type=cite]
+  match = body.match(/(<blockquote[^>]*type="cite"[\s\S]*)<\/body>/i);
+  if (match) return match[1];
+  return '';
 }
 
 /**

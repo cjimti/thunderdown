@@ -10,9 +10,9 @@ const ThunderdownState = {
     return `tab_${tabId}`;
   },
 
-  async save(tabId, markdown) {
+  async save(tabId, markdown, quotedSection) {
     await messenger.storage.session.set({
-      [this._key(tabId)]: { markdown, isRendered: true },
+      [this._key(tabId)]: { markdown, quotedSection: quotedSection || '', isRendered: true },
     });
   },
 
@@ -22,7 +22,7 @@ const ThunderdownState = {
     const state = result[key];
     if (!state) return null;
     await messenger.storage.session.remove(key);
-    return state.markdown;
+    return { markdown: state.markdown, quotedSection: state.quotedSection || '' };
   },
 
   async isRendered(tabId) {
