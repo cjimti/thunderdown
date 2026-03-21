@@ -1,0 +1,56 @@
+{
+  "manifest_version": 3,
+  "name": "Thunderdown",
+  "version": "1.0.0",
+  "description": "Lightning-fast Markdown to styled HTML for email composition. Paste Markdown, toggle to render — clean, professional, inline-styled HTML ready to send.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "thunderdown@cjimti.com",
+      "strict_min_version": "128.0"
+    }
+  },
+  "permissions": [
+    "compose",
+    "storage"
+  ],
+  "background": {
+    "scripts": [
+      "vendor/marked.min.js",
+      "vendor/highlight.min.js",
+      "vendor/languages/javascript.min.js",
+      "vendor/languages/python.min.js",
+      "vendor/languages/go.min.js",
+      "vendor/languages/bash.min.js",
+      "vendor/languages/sql.min.js",
+      "vendor/languages/json.min.js",
+      "vendor/languages/yaml.min.js",
+      "vendor/languages/xml.min.js",
+      "lib/renderer.js",
+      "lib/state.js",
+      "background.js"
+    ]
+  },
+  "compose_action": {
+    "default_title": "Thunderdown: Render Markdown",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png"
+    },
+    "default_area": "maintoolbar"
+  },
+  "commands": {
+    "toggle-markdown": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+M",
+        "mac": "Command+Shift+M"
+      },
+      "description": "Toggle Markdown rendering"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}
