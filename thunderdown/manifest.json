@@ -6,7 +6,8 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "thunderdown@cjimti.com",
-      "strict_min_version": "128.0"
+      "strict_min_version": "128.0",
+      "update_url": "https://cjimti.github.io/thunderdown/updates.json"
     }
   },
   "permissions": [
