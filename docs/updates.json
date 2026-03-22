@@ -1,7 +1,20 @@
 {
   "addons": {
     "thunderdown@cjimti.com": {
-      "updates": []
+      "updates": [
+        {
+          "version": "1.0.0",
+          "update_link": "https://github.com/cjimti/thunderdown/releases/download/v1.0.0/thunderdown-1.0.0.xpi",
+          "update_hash": "sha256:9e0acb43253e596eec63ded2146a54edda6616515bdc2f49c0409aff512bdf83",
+          "update_info_url": "https://github.com/cjimti/thunderdown/releases/tag/v1.0.0",
+          "applications": {
+            "gecko": {
+              "strict_min_version": "128.0",
+              "strict_max_version": "*"
+            }
+          }
+        }
+      ]
     }
   }
 }
