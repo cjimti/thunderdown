@@ -1,0 +1,20 @@
+{
+  "name": "thunderdown",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint thunderdown/",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "security": "npm audit --audit-level=moderate",
+    "verify": "npm run lint && npm run test && npm run security",
+    "build": "cd thunderdown && zip -r ../thunderdown.xpi . -x '*.DS_Store'"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-no-unsanitized": "^4.1.0",
+    "globals": "^16.0.0",
+    "vitest": "^4.1.0"
+  }
+}

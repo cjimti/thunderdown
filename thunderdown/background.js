@@ -88,7 +88,7 @@ function extractMarkdownFromBody(details) {
   const body = details.body || '';
 
   // Strip the wrapping HTML structure Thunderbird adds.
-  let match = body.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+  const match = body.match(/<body[^>]*>([\s\S]*)<\/body>/i);
   let content = match ? match[1] : body;
 
   // Remove quoted reply section — everything from moz-cite-prefix onward

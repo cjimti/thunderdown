@@ -1,6 +1,12 @@
 # Build output
 *.xpi
 
+# Dependencies
+node_modules/
+
+# Coverage
+coverage/
+
 # macOS
 .DS_Store
 

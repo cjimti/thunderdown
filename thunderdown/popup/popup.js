@@ -28,7 +28,7 @@ async function updateStatus() {
       statusEl.className = 'status editing';
       textEl.textContent = 'Editing Markdown';
     }
-  } catch (e) {
+  } catch (_e) {
     textEl.textContent = 'Editing Markdown';
   }
 }
